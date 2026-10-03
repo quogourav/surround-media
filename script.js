@@ -56,29 +56,39 @@ document.addEventListener('DOMContentLoaded', () => {
     revealEls.forEach(el => el.classList.add('visible'));
   }
 
-  // Contact form -> prefilled mailto (static site, no backend)
+  // Contact form -> FormSubmit (emails CONTACT_EMAIL)
   const form = document.getElementById('contactForm');
   const note = document.getElementById('formNote');
-  form.addEventListener('submit', e => {
+  const btn = form.querySelector('button[type="submit"]');
+  const setNote = (msg, cls) => { note.textContent = msg; note.className = 'form__note' + (cls ? ' ' + cls : ''); };
+  form.addEventListener('submit', async e => {
     e.preventDefault();
-    const data = new FormData(form);
-    const name = (data.get('name') || '').trim();
-    const email = (data.get('email') || '').trim();
-    if (!name || !/^\S+@\S+\.\S+$/.test(email)) {
-      note.textContent = 'Please enter your name and a valid email address.';
-      note.classList.add('form__note--error');
+    const data = Object.fromEntries(new FormData(form));
+    if (!data.name.trim() || !/^\S+@\S+\.\S+$/.test(data.email.trim())) {
+      setNote('Please enter your name and a valid email address.', 'form__note--error');
       return;
     }
-    note.classList.remove('form__note--error');
-    const body = [
-      `Name: ${name}`,
-      `Email: ${email}`,
-      `Interested in: ${data.get('interest')}`,
-      '',
-      (data.get('message') || '').trim()
-    ].join('\n');
-    const subject = `Project enquiry — ${data.get('interest')}`;
-    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    note.textContent = 'Thanks! Your email app should open with your message ready to send.';
+    btn.disabled = true;
+    setNote('Sending...');
+    try {
+      const res = await fetch(`https://formsubmit.co/ajax/${CONTACT_EMAIL}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          ...data,
+          _subject: `New enquiry from ${location.hostname || 'website'}: ${data.interest}`,
+          _template: 'table'
+        })
+      });
+      const out = await res.json();
+      if (!res.ok || String(out.success) !== 'true') throw new Error(out.message || 'failed');
+      form.reset();
+      setNote('Thank you! Your message has been sent. We will reply within one working day.');
+    } catch (err) {
+      console.error('Contact form failed:', err.message);
+      setNote('Sorry, something went wrong. Please email us at ' + CONTACT_EMAIL + '.', 'form__note--error');
+    } finally {
+      btn.disabled = false;
+    }
   });
 });
