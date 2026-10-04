@@ -90,6 +90,10 @@ h1, h2, h3 { font-family: 'Syne', sans-serif; font-weight: 700; line-height: 1.1
 .chip { position: absolute; top: 0; left: 50%; transform: translate(-50%, -50%); padding: 7px 16px; border-radius: 999px; font-size: .82rem; font-weight: 500; background: var(--panel); border: 1px solid var(--line); white-space: nowrap; animation: counter linear infinite; }
 .orbit__ring--1 .chip { animation-duration: 18s; } .orbit__ring--2 .chip { animation-duration: 26s; animation-direction: reverse; }
 .orbit__ring--3 .chip { animation-duration: 34s; } .orbit__ring--4 .chip { animation-duration: 44s; animation-direction: reverse; }
+/* Start each ring (and its label) at a different angle so labels begin spread out */
+.orbit__ring--2, .orbit__ring--2 .chip { animation-delay: -6.5s; }
+.orbit__ring--3, .orbit__ring--3 .chip { animation-delay: -17s; }
+.orbit__ring--4, .orbit__ring--4 .chip { animation-delay: -33s; }
 .chip--a { color: var(--violet); border-color: var(--violet); }
 .chip--b { color: var(--cyan); border-color: var(--cyan); }
 .chip--c { color: var(--pink); border-color: var(--pink); }
@@ -201,6 +205,11 @@ h1, h2, h3 { font-family: 'Syne', sans-serif; font-weight: 700; line-height: 1.1
 }
 @media (max-width: 640px) {
   .section { padding: 70px 0; }
+  .orbit__ring--1 { inset: 29%; }
+  .orbit__ring--2 { inset: 22%; }
+  .orbit__ring--3 { inset: 16%; }
+  .orbit__ring--4 { inset: 11%; }
+  .orbit__core { inset: 37%; font-size: 1rem; }
   .grid, .loop { grid-template-columns: 1fr; }
   .hero { padding: 56px 0 70px; }
 }
