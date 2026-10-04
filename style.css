@@ -151,14 +151,6 @@ h1, h2, h3 { font-family: 'Syne', sans-serif; font-weight: 700; line-height: 1.1
 .pills span { padding: 12px 24px; border-radius: 999px; border: 1px solid var(--line); background: rgba(255,255,255,.03); transition: all .25s; }
 .pills span:hover { border-color: var(--pink); color: var(--pink); transform: translateY(-3px); }
 
-/* ========== FAQ ========== */
-.faq details { border-bottom: 1px solid var(--line); }
-.faq summary { cursor: pointer; font: 700 1.15rem 'Syne', sans-serif; padding: 24px 40px 24px 0; list-style: none; position: relative; }
-.faq summary::-webkit-details-marker { display: none; }
-.faq summary::after { content: "+"; position: absolute; right: 0; top: 50%; transform: translateY(-50%); font-size: 1.8rem; color: var(--cyan); transition: transform .2s; }
-.faq details[open] summary::after { transform: translateY(-50%) rotate(45deg); }
-.faq details p { padding-bottom: 24px; color: var(--muted); }
-
 /* ========== Contact ========== */
 .contact { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
 .contact__copy > p { color: var(--muted); margin: 18px 0 28px; }
